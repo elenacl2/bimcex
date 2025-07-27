@@ -8,11 +8,8 @@ st.set_page_config(
     layout="centered"
 )
 
-# Cargar imagen
-image = Image.open("bimcex_logo.png")
-
-# Centrar con st.image
-st.image(image, width=200)
+# Mostrar imagen como cabecera (ajusta el ancho si hace falta)
+st.image("bimcex_logo.png", width=400)
 
 # Subtítulo
 st.markdown("""
