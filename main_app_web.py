@@ -2,22 +2,29 @@ import streamlit as st
 from rellenar_cee_dades import generar_excel_datos_cee
 from rellenar_ae_dades import generar_excel_datos_ae
 
-# Configuración inicial de la app
 st.set_page_config(
     page_title="BIMCEX - CE3X i AE",
     page_icon="📄",
     layout="centered"
 )
 
-# Mostrar imagen como cabecera (ajusta el ancho si hace falta)
-st.image("bimcex_logo.png", width=400)
+# Imagen centrada y más pequeña
+st.markdown(
+    """
+    <div style='text-align: center;'>
+        <img src='bimcex_logo.png' width='200'>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-# Subtítulo personalizado
+# Subtítulo
 st.markdown("""
 <div style='text-align: center; font-size: 18px; margin-top: -10px;'>
     <i>Generador de plantilla de dades per la realització de Certificats Energètics i Auditories Energètiques en CE3X a partir de models BIM (format gbxml)</i>
 </div>
 """, unsafe_allow_html=True)
+
 
 st.markdown("---")
 
