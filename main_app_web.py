@@ -1,30 +1,64 @@
 import streamlit as st
 from rellenar_cee_dades import generar_excel_datos_cee
 from rellenar_ae_dades import generar_excel_datos_ae
-import tempfile
-import os
 
-st.set_page_config(page_title="Certificació Energètica BIM", layout="centered")
-st.title("🔍 Certificació Energètica CE3X / AE des de gbXML")
+# Configuración inicial de la app
+st.set_page_config(
+    page_title="BIMCEX - CE3X i AE",
+    page_icon="📄",
+    layout="centered"
+)
 
-uploaded_file = st.file_uploader("📤 Pujar fitxer gbXML", type=["xml"])
+# Mostrar imagen como cabecera (ajusta el ancho si hace falta)
+st.image("bimcex_logo.png", width=400)
 
-tipo_plantilla = st.radio("Selecciona la plantilla a generar:", ["CE3X", "Auditoria Energètica (AE)"])
+# Subtítulo personalizado
+st.markdown("""
+<div style='text-align: center; font-size: 18px; margin-top: -10px;'>
+    <i>Generador de plantilla de dades per la realització de Certificats Energètics i Auditories Energètiques en CE3X a partir de models BIM (format gbxml)</i>
+</div>
+""", unsafe_allow_html=True)
 
-if uploaded_file:
+st.markdown("---")
+
+# Selector de tipo de plantilla
+opcio = st.radio(
+    "Selecciona el tipus de plantilla que vols generar:",
+    [
+        "Plantilla de dades per Certificat Energètic (CE3X)",
+        "Plantilla de dades per Auditoria Energètica (complement d'auditories CE3X)"
+    ]
+)
+
+# Carga del archivo
+arxiu = st.file_uploader("Puja el teu fitxer gbXML", type=["xml"])
+
+# Botón de generación
+if st.button("Generar plantilla") and arxiu is not None:
+    import tempfile
+    import os
+
     with tempfile.NamedTemporaryFile(delete=False, suffix=".xml") as tmp:
-        tmp.write(uploaded_file.read())
-        ruta_temporal = tmp.name
+        tmp.write(arxiu.read())
+        ruta_tmp = tmp.name
 
-    if st.button("Generar plantilla Excel"):
-        with st.spinner("Processant..."):
-            if tipo_plantilla == "CE3X":
-                generar_excel_datos_cee(ruta_temporal)
-                ruta_salida = ruta_temporal.replace(".xml", "_datos_cee.xlsx")
-            else:
-                generar_excel_datos_ae(ruta_temporal)
-                ruta_salida = ruta_temporal.replace(".xml", "_datos_ae.xlsx")
+    try:
+        if opcio.startswith("Plantilla de dades per Certificat"):
+            ruta_sortida = generar_excel_datos_cee(ruta_tmp)
+        else:
+            ruta_sortida = generar_excel_datos_ae(ruta_tmp)
 
-        with open(ruta_salida, "rb") as f:
-            st.success("✅ Fitxer generat amb èxit!")
-            st.download_button("📥 Descarregar plantilla", f, file_name=os.path.basename(ruta_salida))
+        with open(ruta_sortida, "rb") as f:
+            bytes_excel = f.read()
+
+        nom_sortida = os.path.basename(ruta_sortida)
+        st.success("✅ Plantilla generada correctament!")
+        st.download_button("📥 Descarrega la plantilla", data=bytes_excel, file_name=nom_sortida)
+
+    except Exception as e:
+        st.error(f"❌ Error durant la generació: {e}")
+
+elif arxiu is None:
+    st.info("📁 Puja un fitxer gbXML per començar.")
+
+
