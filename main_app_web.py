@@ -8,15 +8,11 @@ st.set_page_config(
     layout="centered"
 )
 
-# Imagen centrada y más pequeña
-st.markdown(
-    """
-    <div style='text-align: center;'>
-        <img src='bimcex_logo.png' width='200'>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# Cargar imagen
+image = Image.open("bimcex_logo.png")
+
+# Centrar con st.image
+st.image(image, width=200)
 
 # Subtítulo
 st.markdown("""
