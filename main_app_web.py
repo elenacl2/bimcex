@@ -8,8 +8,10 @@ st.set_page_config(
     layout="centered"
 )
 
-# Mostrar imagen como cabecera (ajusta el ancho si hace falta)
-st.image("bimcex_logo.png", width=400)
+# Centrar la imagen usando columnas
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("bimcex_logo.png", width=200)
 
 # Subtítulo
 st.markdown("""
