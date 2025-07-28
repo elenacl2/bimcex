@@ -114,4 +114,5 @@ def generar_excel_datos_ae(ruta_xml):
     ruta_salida = os.path.join(os.path.dirname(ruta_xml), f"{nombre_base}_datos_ae.xlsx")
     wb.save(ruta_salida)
     print(f"✅ Archivo generado correctamente: {ruta_salida}")
+    return ruta_salida
 
